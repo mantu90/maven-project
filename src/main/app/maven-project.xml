@@ -14,7 +14,6 @@ http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/
         <spring:bean id="Bean" name="Bean" class="com.mulesoft.training.Database"/>
     </spring:beans>
     <db:derby-config name="Derby_Configuration" url="jdbc:derby:memory:muleEmbeddedDB;create=true" doc:name="Derby Configuration"/>
-    <jms:activemq-connector name="Active_MQ" brokerURL="vm://localhost" validateConnections="true" doc:name="Active MQ"/>
     <flow name="mavenFlow">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/" allowedMethods="GET" doc:name="HTTP"/>
         <set-payload doc:name="Set Payload" value="#['Hello Maven']"/>
@@ -25,10 +24,5 @@ http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/
             <db:parameterized-query><![CDATA[SELECT * FROM FLIGHTS]]></db:parameterized-query>
         </db:select>
         <object-to-string-transformer doc:name="Object to String"/>
-        <jms:outbound-endpoint queue="flights" connector-ref="Active_MQ" doc:name="JMS"/>
-    </flow>
-    <flow name="jmsFlights">
-        <jms:inbound-endpoint queue="flights" connector-ref="Active_MQ" doc:name="JMS"/>
-        <logger message="FLIGHTS JMS: #[payload]" level="INFO" doc:name="Logger"/>
     </flow>
 </mule>
